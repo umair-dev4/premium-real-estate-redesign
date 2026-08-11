@@ -1,15 +1,15 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { eq, ne } from "drizzle-orm";
 import type { Metadata } from "next";
-import { db } from "@/db";
-import { projects } from "@/db/schema";
+import { projectData } from "@/lib/projects";
 import { Reveal } from "@/components/reveal";
 import { ProjectCard } from "@/components/project-card";
 
-export const dynamic = "force-dynamic";
-
 type Params = Promise<{ slug: string }>;
+
+export function generateStaticParams() {
+  return projectData.map((project) => ({ slug: project.slug }));
+}
 
 export async function generateMetadata({
   params,
@@ -17,11 +17,7 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const [project] = await db
-    .select()
-    .from(projects)
-    .where(eq(projects.slug, slug))
-    .limit(1);
+  const project = projectData.find((item) => item.slug === slug);
 
   if (!project) return { title: "Project not found" };
 
@@ -33,20 +29,11 @@ export async function generateMetadata({
 
 export default async function ProjectDetail({ params }: { params: Params }) {
   const { slug } = await params;
-  const [project] = await db
-    .select()
-    .from(projects)
-    .where(eq(projects.slug, slug))
-    .limit(1);
+  const project = projectData.find((item) => item.slug === slug);
 
   if (!project) notFound();
 
-  const more = await db
-    .select()
-    .from(projects)
-    .where(ne(projects.slug, slug))
-    .orderBy(projects.position)
-    .limit(3);
+  const more = projectData.filter((item) => item.slug !== slug).slice(0, 3);
 
   const specs = [
     project.category && ["Type", project.category],

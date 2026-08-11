@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ProjectCard } from "@/components/project-card";
-import type { Project } from "@/db/schema";
+import type { Project } from "@/lib/projects";
 
 export function ProjectsExplorer({ projects }: { projects: Project[] }) {
   const categories = useMemo(() => {

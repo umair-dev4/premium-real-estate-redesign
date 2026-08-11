@@ -1,10 +1,7 @@
-import { db } from "@/db";
-import { projects } from "@/db/schema";
+import { projectData } from "@/lib/projects";
 import { ProjectsExplorer } from "@/components/projects-explorer";
 import { PageHero } from "@/components/page-hero";
 import { IMG } from "@/lib/images";
-
-export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Properties",
@@ -13,8 +10,6 @@ export const metadata = {
 };
 
 export default async function ProjectsPage() {
-  const all = await db.select().from(projects).orderBy(projects.position);
-
   return (
     <div className="bg-paper">
       <PageHero
@@ -26,7 +21,7 @@ export default async function ProjectsPage() {
       />
       <section className="bg-paper py-16 sm:py-24">
         <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
-          <ProjectsExplorer projects={all} />
+          <ProjectsExplorer projects={projectData} />
         </div>
       </section>
     </div>

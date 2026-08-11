@@ -1,14 +1,28 @@
-import "dotenv/config";
-import { db } from "../src/db";
-import { projects } from "../src/db/schema";
-import { IMG } from "../src/lib/images";
+import { IMG } from "./images";
 
-type Seed = Omit<
-  typeof projects.$inferInsert,
-  "id" | "createdAt"
->;
+export type Project = {
+  id: number;
+  slug: string;
+  title: string;
+  category: string;
+  location: string;
+  tagline: string;
+  description: string;
+  status: string;
+  year: number | null;
+  units: number | null;
+  areaSqm: number | null;
+  imageUrl: string;
+  gallery: string[] | null;
+  highlights: string[] | null;
+  featured: boolean;
+  position: number;
+  createdAt: Date;
+};
 
-const rows: Seed[] = [
+type StaticProject = Omit<Project, "id" | "createdAt">;
+
+const rows: StaticProject[] = [
   {
     slug: "domus-blanc-boutique-hotel",
     title: "Domus Blanc Boutique Hotel",
@@ -281,19 +295,10 @@ const rows: Seed[] = [
   },
 ];
 
-async function main() {
-  console.log(`Seeding ${rows.length} projects…`);
-  for (const row of rows) {
-    await db
-      .insert(projects)
-      .values(row)
-      .onConflictDoNothing({ target: projects.slug });
-  }
-  console.log("Seed complete.");
-  process.exit(0);
-}
-
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+export const projectData: Project[] = rows
+  .map((project, index) => ({
+    ...project,
+    id: index + 1,
+    createdAt: new Date(0),
+  }))
+  .sort((a, b) => a.position - b.position);

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { ProjectCard } from "@/components/project-card";
-import type { Project } from "@/db/schema";
+import type { Project } from "@/lib/projects";
 
 export function FeaturedProjects({ projects }: { projects: Project[] }) {
   return (

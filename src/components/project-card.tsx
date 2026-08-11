@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Project } from "@/db/schema";
+import type { Project } from "@/lib/projects";
 
 export function ProjectCard({
   project,

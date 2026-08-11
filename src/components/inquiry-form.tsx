@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { site } from "@/lib/site";
 
 const INTERESTS = [
   "General enquiry",
@@ -22,30 +23,37 @@ export function InquiryForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("loading");
     setError(null);
 
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
+    const name = String(data.name ?? "").trim();
+    const email = String(data.email ?? "").trim();
 
-    try {
-      const res = await fetch("/api/inquiries", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.ok) {
-        throw new Error(json.error || "Submission failed.");
-      }
-      setStatus("success");
-      form.reset();
-    } catch (err) {
+    if (name.length < 2 || !/^\S+@\S+\.\S+$/.test(email)) {
       setStatus("error");
-      setError(err instanceof Error ? err.message : "Submission failed.");
+      setError("Please enter your name and a valid email address.");
+      return;
     }
+
+    const subject = encodeURIComponent(`Website enquiry from ${name}`);
+    const body = encodeURIComponent(
+      [
+        `Name: ${name}`,
+        `Email: ${email}`,
+        `Phone: ${String(data.phone ?? "")}`,
+        `Interest: ${String(data.interest ?? "")}`,
+        "",
+        String(data.message ?? ""),
+      ].join("\n")
+    );
+
+    window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
+    setStatus("success");
+    form.reset();
   }
 
   if (status === "success") {
@@ -60,8 +68,8 @@ export function InquiryForm() {
           Thank you.
         </h3>
         <p className="mt-3 max-w-sm text-sm leading-relaxed text-stone">
-          Your enquiry has reached our team in Chania. We&apos;ll be in touch
-          shortly to talk through the details.
+          Your email app has opened with the enquiry ready. Send that email to
+          deliver it to our team in Chania.
         </p>
         <button
           type="button"
