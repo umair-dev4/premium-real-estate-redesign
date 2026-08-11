@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { site } from "@/lib/site";
 
 function Instagram() {
@@ -93,18 +94,14 @@ export function Footer() {
         <div className="grid gap-12 lg:grid-cols-12">
           {/* Brand */}
           <div className="lg:col-span-4">
-            <Link href="/" className="flex items-center gap-3" aria-label="Hellenic Homes — home">
-              <span className="grid h-9 w-9 place-items-center rounded-full border border-white/30 text-white">
-                <span className="font-display text-base leading-none">H</span>
-              </span>
-              <span className="leading-none">
-                <span className="block font-display text-[1.05rem] tracking-[0.14em] text-white">
-                  HELLENIC
-                </span>
-                <span className="mt-0.5 block text-[0.62rem] font-medium uppercase tracking-[0.42em] text-white/50">
-                  Homes
-                </span>
-              </span>
+            <Link href="/" className="inline-flex items-center" aria-label="Hellenic Homes — home">
+              <Image
+                src="/hellenic-homes-logo.png"
+                alt={site.name}
+                width={1300}
+                height={242}
+                className="h-auto w-[210px] object-contain brightness-0 invert sm:w-[240px]"
+              />
             </Link>
             <p className="mt-7 max-w-xs text-sm leading-relaxed text-white/50">
               {site.legalName} designs and constructs villas, residences and

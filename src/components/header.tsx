@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { mainNav, site } from "@/lib/site";
@@ -48,33 +49,18 @@ export function Header() {
         <Link
           href="/"
           aria-label="Hellenic Homes — home"
-          className="group flex items-center gap-3"
+          className="group flex shrink-0 items-center"
         >
-          <span
-            className={`grid h-10 w-10 place-items-center rounded-xl transition-colors duration-300 ${
-              chrome
-                ? "bg-white/15 text-white ring-1 ring-white/30"
-                : "bg-ink text-white"
+          <Image
+            src="/hellenic-homes-logo.png"
+            alt={site.name}
+            width={1300}
+            height={242}
+            priority
+            className={`h-auto w-[158px] object-contain transition-[filter] duration-300 sm:w-[190px] ${
+              chrome ? "brightness-0 invert" : ""
             }`}
-          >
-            <span className="font-display text-lg font-bold leading-none">H</span>
-          </span>
-          <span className="leading-none">
-            <span
-              className={`block font-display text-[1.05rem] font-bold tracking-tight transition-colors ${
-                chrome ? "text-white" : "text-ink"
-              }`}
-            >
-              Hellenic Homes
-            </span>
-            <span
-              className={`mt-1 block text-[0.6rem] font-medium uppercase tracking-[0.32em] transition-colors ${
-                chrome ? "text-white/65" : "text-stone"
-              }`}
-            >
-              Chania · Crete
-            </span>
-          </span>
+          />
         </Link>
 
         {/* Desktop nav */}
